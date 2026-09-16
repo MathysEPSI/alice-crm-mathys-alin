@@ -1,0 +1,19 @@
+Violation MVC:
+- Logique métier dans les contrôleurs (AdminMain, Rgister, Contract, ...) (hash mdp, slug, etc.)
+- Il n'y a pas de couche service pour les règles réutilisable mentionnés au dessus.
+
+Code dupliqué:
+- Bcp de codes métiiers (Slugify) recopiés à l'identique
+- Le repo save()/remove() auto-généré est réécrit à l'identique dans chaque repository
+- Les contraintes de validation sont recopiées dans chaque association ___Type / Edit___Type
+
+Mauvaise pratique:
+- Pas de return sur les validations (juste if pas de else) (exemple ContractController)
+- Pas d'interface pour l'envoi de mail, envoi avec clé API
+- Pas de validation centralisé
+- Types de paramètres manquants sur les $id
+
+Tests:
+- Très peu de tests
+- Impossible de mock test les mails
+- Un seul fichier de tests unitaires
