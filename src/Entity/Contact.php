@@ -5,25 +5,41 @@ namespace App\Entity;
 use libphonenumber\PhoneNumber;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ContactRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ContactRepository::class)]
 class Contact
 {
+    // Lettres (accents inclus), chiffres, espaces, apostrophes, tirets et underscores
+    private const NAME_PATTERN = '/^[a-zA-Z0-9À-ÿ\s\'_\-]*$/';
+    private const NAME_MESSAGE = 'Le champ ne doit contenir que des lettres, des chiffres, des tirets et des underscores.';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Veuillez renseigner un Prénom !')]
+    #[Assert\Length(min: 2, max: 30, minMessage: 'Le Prénom contient moins de {{ limit }} caractères ?', maxMessage: 'Le Prénom contient plus de {{ limit }} caractères ?')]
+    #[Assert\Regex(pattern: self::NAME_PATTERN, message: self::NAME_MESSAGE)]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Veuillez renseigner un Nom !')]
+    #[Assert\Length(min: 2, max: 30, minMessage: 'Le Nom contient moins de {{ limit }} caractères ?', maxMessage: 'Le Nom contient plus de {{ limit }} caractères ?')]
+    #[Assert\Regex(pattern: self::NAME_PATTERN, message: self::NAME_MESSAGE)]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Veuillez renseigner votre adresse email.')]
+    #[Assert\Length(min: 5, max: 255, minMessage: 'Votre email contient moins de {{ limit }} caractères ?', maxMessage: 'Votre email est trop long !')]
+    #[Assert\Email(message: 'L\'adresse email "{{ value }}" n\'est pas valide.')]
     private ?string $email = null;
 
-     #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Veuillez renseigner une fonction !')]
+    #[Assert\Regex(pattern: self::NAME_PATTERN, message: self::NAME_MESSAGE)]
     private ?string $position = null;
 
     #[ORM\Column]

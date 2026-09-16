@@ -35,9 +35,9 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
         $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
 
+        // Message volontairement identique à celui d'un mot de passe invalide : ne pas révéler l'existence du compte
         if (!$user) {
-            // User not found, throw an exception
-            throw new CustomUserMessageAuthenticationException('Vous n\'êtes pas enregistré. Veuillez vous inscrire pour accéder à votre compte.');
+            throw new CustomUserMessageAuthenticationException('Identifiants invalides.');
         }
 
         if (!$user->getIsVerified()) {

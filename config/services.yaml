@@ -9,6 +9,8 @@ parameters:
     documents_directory: '%kernel.project_dir%/public/uploads/documents'
     app.googlesearch.api_key: '%env(APP_GOOGLESEARCH_API_KEY)%'
     app.googlecustomsearch.api_key: '%env(GOOGLE_CUSTOM_SEARCH_API_KEY)%'
+    app.mail.sender_email: 'no-reply@alice-le-blog.fr'
+    app.mail.sender_name: 'Alice CRM'
 
 
 services:
@@ -16,6 +18,9 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        bind:
+            string $senderEmail: '%app.mail.sender_email%'
+            string $senderName: '%app.mail.sender_name%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -25,6 +30,9 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
+
+    # Permet d'injecter l'interface (et donc de substituer un double en test)
+    App\Service\MailerServiceInterface: '@App\Service\MailerService'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
